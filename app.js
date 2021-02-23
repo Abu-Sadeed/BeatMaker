@@ -13,6 +13,7 @@ class drumKit {
         this.isPlaying = null
         this.selects = document.querySelectorAll('select')
         this.muteBtns = document.querySelectorAll('.mute')
+        this.tempoSlider = document.querySelector('.tempo-slider')
     }
 
     activePad() {
@@ -102,6 +103,21 @@ class drumKit {
         }
     }
 
+    changeTempo(e) {
+        const tempoText = document.querySelector('.tempo-nr')
+        this.bpm = e.target.value
+        tempoText.innerText = e.target.value
+    }
+
+    updateTempo(e) {
+        clearInterval(this.isPlaying)
+        this.isPlaying = null
+        const playBtn = document.querySelector('.play')
+        if (playBtn.classList.contains('active')) {
+            this.start()
+        }
+    }
+
     start() {
         const interval = (60 / this.bpm) * 1000
         if (!this.isPlaying) {
@@ -142,4 +158,12 @@ kit.muteBtns.forEach(btn => {
     btn.addEventListener('click', function (e) {
         kit.mute(e)
     })
+})
+
+kit.tempoSlider.addEventListener('input', function (e) {
+    kit.changeTempo(e)
+})
+
+kit.tempoSlider.addEventListener('change', function (e) {
+    kit.updateTempo(e)
 })
